@@ -47,18 +47,21 @@ app.get("/api/students/:id", (req, res) => {
 const schema = Joi.object({
    name: Joi.string().min(3).required(),
    course: Joi.string().min(3).required(),
-   level: Joi.number().integer().min(100).max(500).required(),
+   level: Joi.number().integer().valid(100, 200, 300, 400, 500).required(),
 });
 
-//Function to generate next ID
+// Function to generate a 3-digit random ID
 const getNextId = () => {
-   const maxId =
-      students.length > 0 ? Math.max(...students.map((s) => s.id)) : 0;
-   return maxId + 1;
+   let newId;
+   do {
+      newId = Math.floor(Math.random() * 900) + 100; // Generates 100-999
+   } while (students.some((s) => s.id === newId)); // Check for duplicates
+   return newId;
 };
 
 app.post("/api/students", (req, res) => {
    // validate the request body against the schema
+   // const result = schema.validate(req.body);
    const result = schema.validate(req.body);
 
    // 400 Bad Request if validation fails
