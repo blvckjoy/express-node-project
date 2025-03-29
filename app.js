@@ -61,7 +61,6 @@ const getNextId = () => {
 
 app.post("/api/students", (req, res) => {
    // validate the request body against the schema
-   // const result = schema.validate(req.body);
    const result = schema.validate(req.body);
 
    // 400 Bad Request if validation fails
