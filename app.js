@@ -34,8 +34,9 @@ app.get("/api/students", (req, res) => {
 });
 
 app.get("/api/students/:id", (req, res) => {
+   // Look up the student
    const student = students.find((s) => s.id === parseInt(req.params.id));
-
+   // If not existing, return 404
    if (!student) {
       return res.status(404).send("Student not found");
    }
@@ -53,10 +54,10 @@ const getNextId = () => {
 
 // HTTP POST REQUEST
 app.post("/api/students", (req, res) => {
-   // validate the request body against the schema
+   // validate student
    const { error } = validateStudent(req.body);
 
-   // 400 Bad Request if validation fails
+   // If invalid, return 400 Bad request
    if (error) {
       return res.status(400).send(error.details[0].message);
    }
@@ -74,17 +75,14 @@ app.post("/api/students", (req, res) => {
 // HTTP PUT REQUEST
 app.put("/api/students/:id", (req, res) => {
    // Look up the student
-   const studentIndex = students.findIndex(
-      (s) => s.id === parseInt(req.params.id)
-   );
+   const student = students.find((s) => s.id === parseInt(req.params.id));
    // If not existing, return 404
-   if (studentIndex === -1) {
-      res.status(404).send("Student not found");
+   if (!student) {
+      res.status(404).send("student not found");
    }
 
    // Validate student
    const { error } = validateStudent(req.body);
-
    // If invalid, return 400 Bad request
    if (error) {
       res.status(400).send(error.details[0].message);
@@ -98,10 +96,27 @@ app.put("/api/students/:id", (req, res) => {
       id: parseInt(req.params.id),
    };
    // Replace old student in the array
-   students[studentIndex] = updatedStudent;
+   students[student] = updatedStudent;
 
    // Return the updated student
    res.send(updatedStudent);
+});
+
+// HTTP DELETE REQUEST
+app.delete("/api/students/:id", (req, res) => {
+   // Look up the student
+   const student = students.find((s) => s.id === parseInt(req.params.id));
+   // If not existing, return 404
+   if (!student) {
+      res.status(404).send("Student not found");
+   }
+
+   // Delete
+   const index = students.indexOf(student);
+   students.splice(index, 1);
+
+   // Return the same student
+   res.send(students);
 });
 
 // Function to validate student
