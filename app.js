@@ -54,11 +54,11 @@ const getNextId = () => {
 // HTTP POST REQUEST
 app.post("/api/students", (req, res) => {
    // validate the request body against the schema
-   const result = validateStudent(req.body);
+   const { error } = validateStudent(req.body);
 
    // 400 Bad Request if validation fails
-   if (result.error) {
-      return res.status(400).send(result.error.details[0].message);
+   if (error) {
+      return res.status(400).send(error.details[0].message);
    }
 
    const student = {
@@ -83,10 +83,11 @@ app.put("/api/students/:id", (req, res) => {
    }
 
    // Validate student
-   const result = validateStudent(req.body);
+   const { error } = validateStudent(req.body);
+
    // If invalid, return 400 Bad request
-   if (result.error) {
-      res.status(400).send(result.error.details[0].message);
+   if (error) {
+      res.status(400).send(error.details[0].message);
    }
 
    // Update student
