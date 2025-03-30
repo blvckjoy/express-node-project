@@ -42,14 +42,6 @@ app.get("/api/students/:id", (req, res) => {
    res.send(student);
 });
 
-// HTTP POST REQUEST
-// Joi schema for student validation
-const schema = Joi.object({
-   name: Joi.string().min(3).required(),
-   course: Joi.string().min(3).required(),
-   level: Joi.number().integer().valid(100, 200, 300, 400, 500).required(),
-});
-
 // Function to generate a 3-digit random ID
 const getNextId = () => {
    let newId;
@@ -59,9 +51,10 @@ const getNextId = () => {
    return newId;
 };
 
+// HTTP POST REQUEST
 app.post("/api/students", (req, res) => {
    // validate the request body against the schema
-   const result = schema.validate(req.body);
+   const result = validateStudent(req.body);
 
    // 400 Bad Request if validation fails
    if (result.error) {
@@ -77,6 +70,17 @@ app.post("/api/students", (req, res) => {
    students.push(student);
    res.send(student);
 });
+
+// Function to validate student
+function validateStudent(student) {
+   const schema = Joi.object({
+      name: Joi.string().min(3).required(),
+      course: Joi.string().min(3).required(),
+      level: Joi.number().integer().valid(100, 200, 300, 400, 500).required(),
+   });
+
+   return schema.validate(student);
+}
 
 app.listen(port, () => {
    console.log(`Listening on port ${port}...`);
