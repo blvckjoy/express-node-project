@@ -78,14 +78,14 @@ app.put("/api/students/:id", (req, res) => {
    const student = students.find((s) => s.id === parseInt(req.params.id));
    // If not existing, return 404
    if (!student) {
-      res.status(404).send("student not found");
+      return res.status(404).send("student not found");
    }
 
    // Validate student
    const { error } = validateStudent(req.body);
    // If invalid, return 400 Bad request
    if (error) {
-      res.status(400).send(error.details[0].message);
+      return res.status(400).send(error.details[0].message);
    }
 
    // Update student
@@ -108,7 +108,7 @@ app.delete("/api/students/:id", (req, res) => {
    const student = students.find((s) => s.id === parseInt(req.params.id));
    // If not existing, return 404
    if (!student) {
-      res.status(404).send("Student not found");
+      return res.status(404).send("Student not found");
    }
 
    // Delete
