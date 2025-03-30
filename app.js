@@ -71,6 +71,38 @@ app.post("/api/students", (req, res) => {
    res.send(student);
 });
 
+// HTTP PUT REQUEST
+app.put("/api/students/:id", (req, res) => {
+   // Look up the student
+   const studentIndex = students.findIndex(
+      (s) => s.id === parseInt(req.params.id)
+   );
+   // If not existing, return 404
+   if (studentIndex === -1) {
+      res.status(404).send("Student not found");
+   }
+
+   // Validate student
+   const result = validateStudent(req.body);
+   // If invalid, return 400 Bad request
+   if (result.error) {
+      res.status(400).send(result.error.details[0].message);
+   }
+
+   // Update student
+   const updatedStudent = {
+      name: req.body.name,
+      course: req.body.course,
+      level: req.body.level,
+      id: parseInt(req.params.id),
+   };
+   // Replace old student in the array
+   students[studentIndex] = updatedStudent;
+
+   // Return the updated student
+   res.send(updatedStudent);
+});
+
 // Function to validate student
 function validateStudent(student) {
    const schema = Joi.object({
