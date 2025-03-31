@@ -36,7 +36,7 @@ router.post("/", (req, res) => {
       id: getNextId(),
    };
    students.push(student);
-   res.status(200).json(student);
+   res.status(201).json(student);
 });
 
 // HTTP PUT REQUEST
