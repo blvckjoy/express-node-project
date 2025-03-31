@@ -96,7 +96,9 @@ app.put("/api/students/:id", (req, res) => {
       id: parseInt(req.params.id),
    };
    // Replace old student in the array
-   students[student] = updatedStudent;
+   const index = students.indexOf(student);
+   console.log(students[index]);
+   students[index] = updatedStudent;
 
    // Return the updated student
    res.send(updatedStudent);
@@ -116,7 +118,7 @@ app.delete("/api/students/:id", (req, res) => {
    students.splice(index, 1);
 
    // Return the same student
-   res.send(students);
+   res.send(student);
 });
 
 // Function to validate student
