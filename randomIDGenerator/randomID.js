@@ -1,3 +1,5 @@
+const { students } = require("../data/students");
+
 // Function to generate a 3-digit random ID
 const getNextId = () => {
    let newId;
