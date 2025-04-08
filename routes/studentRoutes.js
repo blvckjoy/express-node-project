@@ -3,6 +3,7 @@ const router = express.Router();
 const { students } = require("../data/students");
 const { validateStudent } = require("../validation/studentValidation");
 const { getNextId } = require("../randomIDGenerator/randomID");
+const Joi = require("joi");
 
 router.get("/", (req, res) => {
    res.json(students);
@@ -44,19 +45,23 @@ router.patch("/:id", (req, res) => {
       return res.status(404).json({ message: "Student not found" });
    }
 
-   const { error } = validateStudent(req.body);
+   // Create a schema that makes all fields optional for PATCH
+   const patchSchema = Joi.object({
+      name: Joi.string().min(3),
+      course: Joi.string().min(3),
+      level: Joi.number().integer().valid(100, 200, 300, 400, 500),
+   });
+
+   const { error } = patchSchema.validate(req.body);
    if (error) {
       return res.status(400).json({ message: error.details[0].message });
    }
 
-   const { name, course, level } = req.body;
    const updatedStudent = {
-      name,
-      course,
-      level,
-      id: parseInt(req.params.id),
+      ...student,
+      ...req.body,
    };
-   // Replace old student in the array
+
    const index = students.indexOf(student);
    students[index] = updatedStudent;
 
