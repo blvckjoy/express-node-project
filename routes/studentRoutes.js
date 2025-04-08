@@ -79,7 +79,7 @@ router.delete("/:id", (req, res) => {
    const index = students.indexOf(student);
    students.splice(index, 1);
 
-   res.status(200).json(student);
+   res.status(200).json({ message: "Student deleted successfully" });
 });
 
 module.exports = router;
