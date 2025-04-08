@@ -1,12 +1,13 @@
-# express-node-project
+# Student Management API
 
-A simple RESTful API built with Express.js for managing students. This application demonstrates CRUD operations with input validation using Joi.
+A RESTful API built with Express.js for managing student information. This API provides endpoints for creating, reading, updating, and deleting (CRUD) student records.
 
 ## Features
 
--  GET all students
--  GET single student by ID
--  POST new student
--  PUT update existing student
--  DELETE student
--  Input validation for student addition and updates
+-  Create new student records
+-  Retrieve all students or individual student by ID
+-  Update student information (partial updates supported)
+-  Delete student records
+-  Input validation using Joi
+-  Error handling with appropriate HTTP status codes
+-  RESTful API design following best practices
