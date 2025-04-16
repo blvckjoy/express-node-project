@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const { students } = require("../data/students");
-const { validateStudent } = require("../validation/studentValidation");
+const {
+   validateStudent,
+   validateStudentUpdate,
+} = require("../validation/studentValidation");
 const { getNextId } = require("../randomIDGenerator/randomID");
 const Joi = require("joi");
 
@@ -46,13 +49,13 @@ router.patch("/:id", (req, res) => {
    }
 
    // Create a schema that makes all fields optional for PATCH
-   const patchSchema = Joi.object({
-      name: Joi.string().min(3),
-      course: Joi.string().min(3),
-      level: Joi.number().integer().valid(100, 200, 300, 400, 500),
-   });
+   // const patchSchema = Joi.object({
+   //    name: Joi.string().min(3),
+   //    course: Joi.string().min(3),
+   //    level: Joi.number().integer().valid(100, 200, 300, 400, 500),
+   // });
 
-   const { error } = patchSchema.validate(req.body);
+   const { error } = validateStudentUpdate(req.body);
    if (error) {
       return res.status(400).json({ message: error.details[0].message });
    }
